@@ -1,41 +1,16 @@
-- name: "Set hostname according to inventory"
+---
+- name: "set hostname according to inventory"
   hostname:
-    name: '{{ inventory_hostname }}'
-  when: "{{ domain | length == 0 }}"
+    name: "{{ inventory_hostname }}"
   tags:
-    - network
+    - hosts-configure
 
-- name: "Set hostname according to inventory"
-  hostname:
-    name: '{{ inventory_hostname }}.{{ domain }}'
-  when: "{{ domain | length > 0 }}"
+- name: "bind hosts to their private IPs"
+  template:
+    src:   "etc/hosts.j2"
+    dest:  "/etc/hosts"
+    mode:  0644
+    owner: root
+    group: root
   tags:
-    - network
-
-- name: "Bind hostname to 127.0.0.1"
-  lineinfile:
-    dest: '/etc/hosts'
-    regexp: '^127\.0\.0\.1'
-    line: "127.0.0.1 {{ inventory_hostname }} {{ hostvars[inventory_hostname]['inventory_hostname'] }} localhost"
-  when: "{{ domain | length == 0 }}"
-  tags:
-    - network
-    
-- name: "Bind hostname to 127.0.0.1"
-  lineinfile:
-    dest: '/etc/hosts'
-    regexp: '^127\.0\.0\.1'
-    line: "127.0.0.1 {{ inventory_hostname }} {{ inventory_hostname }}.{{ domain }} {{ hostvars[inventory_hostname]['inventory_hostname'] }} localhost"
-  when: "{{ domain | length > 0 }}"
-  tags:
-    - network
-
-- name: "Bind other hosts to their private ips"
-  lineinfile:
-    dest: '/etc/hosts'
-    regexp: "{{ hostvars[item]['inventory_hostname'] }}$"
-    insertafter: '^127\.0\.0\.1'
-    line: "{{ hostvars[item].specified_ip }} {{ hostvars[item]['inventory_hostname'] }}"
-  with_items: '{{ groups.all }}'
-  tags:
-    - network
+    - hosts-configure

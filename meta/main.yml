@@ -1,6 +1,6 @@
 galaxy_info:
   author: Alexey Osipenko
-  description: add rules to /etc/hosts
+  description: Add rules to /etc/hosts
   company: Cimon.io
   license: MIT
   min_ansible_version: 2.0.0
@@ -12,6 +12,7 @@ galaxy_info:
       versions:
       - all
 
-  galaxy_tags: []
+  galaxy_tags:
+    - hosts
 
 dependencies: []

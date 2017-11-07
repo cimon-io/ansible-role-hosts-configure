@@ -1,68 +1,52 @@
-Configure /etc/hosts
-=========
+# Ansible configure hosts role
 
-An Ansible Role that adds rules to /etc/hosts in accordance with playbook inventory.
+An ansible role that adds rules to `/etc/hosts` in accordance with the playbook inventory.
 
-Requirements
-------------
+The role includes the following tasks:
 
-None.
+1. Set a current hostname according to the inventory.
+2. Bind the hostname `inventory_hostname` along with `inventory_hostname_short` to 127.0.0.1.
+3. Bind all other hosts from `inventory` to their private IPs adding corresponding rules to the file `/etc/hosts`.
 
-Role Variables
---------------
+This role can be run under all versions of Ubuntu and Debian.
 
-Role use variables from inventory file: `{{ hostvars[item].specified_ip }}` and `{{ hostvars[item]['inventory_hostname'] }}`.
+## Requirements
 
-Dependencies
-------------
+None
 
-None.
+## Role Variables
 
-Example Playbook
-----------------
+The only role variable is a private IP address:
 
+```yaml
+network_private_ip: ""
+```
+
+## Dependencies
+
+None
+
+## Example Playbook
+
+```yaml
     - hosts: all
       roles:
-        - role: configure-network
-
-Inside `inventory/hosts`:
-
+        - role: hosts-configure
 ```
-[web]
-fo-1
+
+You can add hosts at `inventory`:
+
+```yaml
+[web]                                                   # A group name
+fo-1.example.com network_private_ip=10.0.123.123        # A host name
 
 [backend]
-app-1
+app-1.example.com network_private_ip=10.0.123.23
 
 [dbs]
-db-1
+db-1.example.com network_private_ip=10.0.123.12
 ```
 
-Inside `inventory/host_vars/fo-1`:
+## License
 
-```
----
-ansible_ssh_host: 123.123.123.123
-specified_ip: 123.123.123.123
-```
-
-Inside `inventory/host_vars/app-1`:
-
-```
----
-ansible_ssh_host: 124.124.124.124
-specified_ip: 10.10.10.10
-```
-
-Inside `inventory/host_vars/db-1`:
-```
----
-ansible_ssh_host: 125.125.125.125
-specified_ip: 10.10.10.11
-```
-
-License
--------
-
-MIT
-
+Licensed under the [MIT License](https://opensource.org/licenses/MIT).
