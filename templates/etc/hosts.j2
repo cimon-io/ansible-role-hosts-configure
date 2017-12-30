@@ -1,10 +1,10 @@
 # {{ ansible_managed }}
 
-127.0.0.1 localhost {{ inventory_hostname_short }} {{ inventory_hostname }}
+127.0.0.1 localhost {{ inventory_hostname }} {{ inventory_hostname_short }}
 
 {% for host in groups.all %}
 {% if hostvars[host].network_private_ip is defined %}
-{{ hostvars[host].network_private_ip }} {{ hostvars[host].inventory_hostname_short }} {{ hostvars[host].inventory_hostname }}
+{{ hostvars[host].network_private_ip }} {{ hostvars[host].inventory_hostname }} {{ hostvars[host].inventory_hostname_short }}
 {% endif %}
 {% endfor %}
 
