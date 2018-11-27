@@ -3,7 +3,7 @@
 127.0.0.1 localhost {{ inventory_hostname }} {{ inventory_hostname_short }}
 
 {% for host in groups.all %}
-{% if hostvars[host].network_private_ip is defined %}
+{% if hostvars[host].network_private_ip is defined and hostvars[host].network_private_ip %}
 {{ hostvars[host].network_private_ip }} {{ hostvars[host].inventory_hostname }} {{ hostvars[host].inventory_hostname_short }}
 {% endif %}
 {% endfor %}
